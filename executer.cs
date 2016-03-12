@@ -68,6 +68,9 @@ namespace PL
                 case Token.TokenType.Save_KEY : execute_save(code); break;
                 case Token.TokenType.Li_KEY : execute_li(code); break;
                 case Token.TokenType.La_KEY : execute_la(code); break;
+
+                case Token.TokenType.Move_KEY : execute_move(code); break;
+                case Token.TokenType.Syscall_KEY : execute_syscall(code); break;
             }
         }
 
@@ -362,15 +365,76 @@ namespace PL
 
         private void execute_li(Code code)
         {
-            //li $0 , x
+            //li $0 , x => $0 = x
             regs.set(code.value(0),int.Parse(code.value(1)));
         }
 
         private void execute_la(Code code)
         {
-            //la $0 , label
+            //la $0 , label => $0 = address of label
             int addr = Data.getAddress(code.value(1) + ":");
             regs.set(code.value(0),addr);
+        }
+#endregion
+
+#region sys
+        private void execute_move(Code code)
+        {
+            //move $0 , $1 => $0 = 1
+            int val = regs.get(code.value(1));
+            regs.set(code.value(0), val);
+        }
+
+        enum Syscall
+        {
+            Print_Int = 1,
+            Print_String = 4,
+            Read_Int = 5,
+            Read_String = 8,
+            Exit = 10
+        }
+
+        private void execute_syscall(Code code)
+        {
+            int op_code = regs.get("$v0");
+            switch((Syscall)op_code)
+            {
+                case Syscall.Print_Int : syscall_print_int(); break;
+                case Syscall.Print_String : syscall_print_string(); break;
+                case Syscall.Read_Int : syscall_read_int(); break;
+                case Syscall.Read_String : syscall_read_string(); break;
+                case Syscall.Exit : syscall_exit(); break;
+                default :
+                    Compiler.Error("Runtime","op code " + op_code + " not supported");
+                    break;
+            }
+        }
+
+        private void syscall_print_int()
+        {
+            Console.WriteLine(regs.get("$a0"));
+        }
+
+        private void syscall_print_string()
+        {
+
+        }
+
+        private void syscall_read_int()
+        {
+            int input = 0;
+            int.TryParse(Console.ReadLine(),out input);
+            regs.set("$v0", input);
+        }
+
+        private void syscall_read_string()
+        {
+
+        }
+
+        private void syscall_exit()
+        {
+
         }
 #endregion
     }

@@ -8,16 +8,25 @@ namespace PL
 	{
 		public static bool DEBUG;
 		private static string path;
+		public static int MemorySize;
+
+		private static void init()
+		{
+			DEBUG = false;
+			MemorySize = 500;
+		}
 
 		public static void Main(string[] args)
 		{
-			DEBUG = false;
+			init();
 			parseArgument(args);
 			//Lex lex = new Lex("/home/arpple/Desktop/file/prog_lang/test.txt");
 			Lex lex = new Lex(path);
 			Parser parser = new Parser(lex.getTokenStream());
 			Executer exe = new Executer(parser.getTree());
 		}
+
+
 
 		private static void parseArgument(string[] args)
 		{
@@ -41,7 +50,22 @@ namespace PL
 						if(i + 1 < args.Length)
 							path = args[i+1];
 						else
-							Error("Compier","pls enter file name after -f");
+							Error("Compiler","pls enter file name after -f");
+						i++;
+					}
+					if(args[i] == "-m")
+					{
+						if(i + 1 < args.Length)
+						{
+							int m = 0;
+							int.TryParse(args[i+1],out m);
+							if(m > 0)
+							{
+								MemorySize = m;
+							}
+						}
+						else
+							Error("Compiler","pls enter memory size");
 						i++;
 					}
 				}
@@ -72,14 +96,9 @@ namespace PL
 
 		public static void test()
 		{
-			char[] space = new char[40];
-			space[0] = '0';
-			space[1] = '1';
-			space[2] = '3';
-
-			string s = new string(space);
-
-			Console.WriteLine(s);
+			int i = 0;
+			int.TryParse(Console.ReadLine(),out i);
+			Console.WriteLine(i);
 		}
 	}
 }

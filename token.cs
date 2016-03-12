@@ -145,7 +145,7 @@ namespace PL
 				Regex rx = new Regex(rx_str);
 				if(rx.IsMatch(word))
 				{
-					Compiler.log(word + " with " + rx_str);
+					//Compiler.log(word + " with " + rx_str);
 					return new Token(type,word,lineNumber);
 				}
 			}

@@ -7,12 +7,14 @@ namespace PL
     {
 #region static
         private static int lastAddress;
-        private static List<Data> dataList;
+        //private static List<Data> dataList;
+        private static int[] dataList;
         private static Dictionary<string,int> dataTable;
 
         public static void init()
         {
-            dataList = new List<Data>();
+            Console.WriteLine(Compiler.MemorySize);
+            dataList = new int[Compiler.MemorySize];
             dataTable = new Dictionary<string,int>();
             lastAddress = 0;
         }
@@ -27,14 +29,12 @@ namespace PL
 
         public static int getData(int address,int offset)
         {
-            Data dt = dataList[address];
-            return dt._value[offset];
+            return dataList[address + offset];
         }
 
         public static void saveData(int address,int offset, int value)
         {
-            Data dt = dataList[address];
-            dt._value[offset] = value;
+            dataList[address + offset] = value;
         }
 
         public static int getAddress(string label)
@@ -50,11 +50,13 @@ namespace PL
 
         public Token.TokenType type;
         public int address;
-
-        private int[] _value;
+        private int size;
 
         public Data(Token label, Token key, params Token[] args)
         {
+            this.type = key.type;
+            this.address = lastAddress;
+
             switch(key.type)
             {
                 case Token.TokenType.Asciiz_KEY : init_asciiz(args); break;
@@ -63,11 +65,20 @@ namespace PL
                 case Token.TokenType.Space_KEY : init_space(args); break;
             }
 
-            this.type = key.type;
-            this.address = lastAddress;
-            dataList.Add(this);
             dataTable.Add(label.value, this.address);
-            lastAddress++;
+        }
+
+        public void alloc(int size)
+        {
+            if(lastAddress + size <= Compiler.MemorySize)
+            {
+                lastAddress += size;
+                this.size = size;
+            }
+            else
+            {
+                Compiler.Error("Data","not enough memory space, try config with -m <mem_size>");
+            }
         }
 
         public override string ToString()
@@ -75,42 +86,45 @@ namespace PL
             string ret = "Dx" + this.address + " : ";
             if(this.type == Token.TokenType.Asciiz_KEY)
             {
-                char[] char_val = new char[this._value.Length];
-                for(int i=0; i < this._value.Length; i++)
+                ret += '\"';
+                int i = this.address;
+                char c = (char)dataList[i];
+                while(c != '\0')
                 {
-                    char_val[i] = (char)this._value[i];
+                    ret += c;
+                    i++;
+                    c = (char)dataList[i];
                 }
-                ret += new string(char_val);
+                ret += '\"';
             }
             else if(this.type == Token.TokenType.Word_KEY)
             {
-                for(int i=0; i < this._value.Length - 1; i++)
+                for(int i=this.address; i < this.size - 1; i++)
                 {
-                    ret += this._value[i] + ",";
+                    ret += dataList[i] + ',';
                 }
-                ret += this._value[this._value.Length - 1];
+                ret += dataList[this.address + this.size - 1];
             }
             else if(this.type == Token.TokenType.Byte_KEY)
             {
-                for(int i=0; i < this._value.Length - 1; i++)
+                for(int i=this.address; i < this.size - 1; i++)
                 {
-                    ret += "\'" + ((char)this._value[i]).ToString() + "\',";
+                    ret += "\'" + (char)dataList[i] + "\',";
                 }
-                ret += "\'" + ((char)this._value[this._value.Length - 1]).ToString() + "\'";
+                ret += '\'' + (char)dataList[this.address + this.size - 1] + '\'';
             }
             else if(this.type == Token.TokenType.Space_KEY)
             {
-                ret += "\"";
-                char[] char_val = new char[this._value.Length];
-                for(int i=0; i < this._value.Length; i++)
+                ret += '\"';
+                for(int i=this.address; i < this.size; i++)
                 {
-                    if((char)char_val[i] == '\0')
+                    if((char)dataList[i] == '\0')
                     {
                         break;
                     }
-                    ret += (char)this._value[i];
+                    ret += (char)dataList[i];
                 }
-                ret += "\"";
+                ret += '\"';
             }
 
             return ret;
@@ -120,12 +134,12 @@ namespace PL
         {
             //str => int[]
             string str = args[0].value.Trim(new char[]{'\"'});
-            this._value = new int[str.Length];
-
+            alloc(str.Length);
             for(int i=0; i < str.Length; i++)
             {
-                this._value[i] = (int)str[i];
+                dataList[this.address + i] = (int)str[i];
             }
+
         }
 
         private void init_space(Token[] args)
@@ -133,34 +147,34 @@ namespace PL
             int size = int.Parse(args[0].value);
             if(size <= 0)
                 Compiler.Error("Parser-Data","Cannnot allocate space of size " + size);
-            this._value = new int[size];
-            this._value[0] = (int)'\0';
+            alloc(size);
+            dataList[this.address] = '\0';
         }
 
         private void init_word(Token[] args)
         {
-            this._value = new int[args.Length];
+            alloc(args.Length);
             for(int i=0; i < args.Length; i++)
             {
-                this._value[i] = int.Parse(args[i].value);
+                dataList[this.address + i] = int.Parse(args[i].value);
             }
         }
 
         private void init_byte(Token[] args)
         {
-            this._value = new int[args.Length];
+            alloc(args.Length);
             for(int i=0; i < args.Length; i++)
             {
                 char c = args[i].value.Trim(new char[] {'\''})[0];
-                this._value[i] = (int)c;
+                dataList[this.address + i] = (int)c;
             }
         }
 
         public int get(int index)
         {
-            if(index < 0 || index >= this._value.Length)
+            if(index < 0 || index >= Compiler.MemorySize)
                 Compiler.Error("RunTime","index out of range");
-            return this._value[index];
+            return dataList[index];
         }
     }
 }
