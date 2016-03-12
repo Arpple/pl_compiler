@@ -45,10 +45,8 @@ namespace PL
 			Jal_KEY,
 			Jr_KEY,
 
-			Lb_KEY,
-			Lw_KEY,
-			Sb_KEY,
-			Sw_KEY,
+			Load_KEY,
+			Save_KEY,
 			Li_KEY,
 			La_KEY,
 
@@ -109,10 +107,8 @@ namespace PL
 			regEx.Add(TokenType.Jal_KEY,"^jal$");
 			regEx.Add(TokenType.Jr_KEY,"^jr$");
 
-			regEx.Add(TokenType.Lb_KEY,"^lb$");
-			regEx.Add(TokenType.Lw_KEY,"^lw$");
-			regEx.Add(TokenType.Sb_KEY,"^sb$");
-			regEx.Add(TokenType.Sw_KEY,"^sw$");
+			regEx.Add(TokenType.Load_KEY,"^load$");
+			regEx.Add(TokenType.Save_KEY,"^save$");
 			regEx.Add(TokenType.Li_KEY,"^li$");
 			regEx.Add(TokenType.La_KEY,"^la$");
 

@@ -25,6 +25,27 @@ namespace PL
             }
         }
 
+        public static int getData(int address,int offset)
+        {
+            Data dt = dataList[address];
+            return dt._value[offset];
+        }
+
+        public static void saveData(int address,int offset, int value)
+        {
+            Data dt = dataList[address];
+            dt._value[offset] = value;
+        }
+
+        public static int getAddress(string label)
+        {
+            int addr = -1;
+            dataTable.TryGetValue(label,out addr);
+            if(addr < 0)
+                Compiler.Error("Runtime","cannot get address from " + label);
+            return addr;
+        }
+
 #endregion
 
         public Token.TokenType type;
@@ -75,7 +96,7 @@ namespace PL
                 {
                     ret += "\'" + ((char)this._value[i]).ToString() + "\',";
                 }
-                ret += ((char)this._value[this._value.Length - 1]).ToString();
+                ret += "\'" + ((char)this._value[this._value.Length - 1]).ToString() + "\'";
             }
             else if(this.type == Token.TokenType.Space_KEY)
             {

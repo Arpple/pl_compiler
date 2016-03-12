@@ -64,6 +64,10 @@ namespace PL
                 case Token.TokenType.Jal_KEY : execute_jal(code); break;
                 case Token.TokenType.Jr_KEY : execute_jr(code); break;
 
+                case Token.TokenType.Load_KEY : execute_load(code); break;
+                case Token.TokenType.Save_KEY : execute_save(code); break;
+                case Token.TokenType.Li_KEY : execute_li(code); break;
+                case Token.TokenType.La_KEY : execute_la(code); break;
             }
         }
 
@@ -332,29 +336,42 @@ namespace PL
 #endregion
 
 #region Save/Load
-    private void execute_la(Code code)
-    {
-        //la $0 , label
-        //$regs
-    }
+        private void execute_load(Code code)
+        {
+            //load $0 , offset(word) => $0 = load(word[offset])
+            string[] addr_str = code.value(1).Split(new char[]{'(',')'});
+            int offset = 0;
+            if(addr_str[0].Length > 0)
+                offset = int.Parse(addr_str[0]);
+            int addr = regs.get(addr_str[1]);
+            int dt = Data.getData(addr,offset);
+            regs.set(code.value(0),dt);
+        }
 
-    private void execute_li(Code code)
-    {
-        //li $0 , x
-        regs.set(code.value(0),int.Parse(code.value(1)));
-    }
+        private void execute_save(Code code)
+        {
+            //save $0 , offset(word) => word[offset] = $0
+            string[] addr_str = code.value(1).Split(new char[]{'(',')'});
+            int offset = 0;
+            if(addr_str[0].Length > 0)
+                offset = int.Parse(addr_str[0]);
+            int addr = regs.get(addr_str[1]);
+            int val = regs.get(code.value(0));
+            Data.saveData(addr,offset,val);
+        }
 
-    private void execute_lb(Code code)
-    {
-        //lb $0 , data
-    }
+        private void execute_li(Code code)
+        {
+            //li $0 , x
+            regs.set(code.value(0),int.Parse(code.value(1)));
+        }
 
-    private void execute_lw(Code code)
-    {
-        //lw $0 , offset(word)
-
-    }
+        private void execute_la(Code code)
+        {
+            //la $0 , label
+            int addr = Data.getAddress(code.value(1) + ":");
+            regs.set(code.value(0),addr);
+        }
 #endregion
-
     }
 }

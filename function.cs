@@ -49,10 +49,8 @@ namespace PL
 			_function.Add(Token.TokenType.Jal_KEY,new Function(Token.TokenType.Jal_KEY,Token.TokenType.Address));
 			_function.Add(Token.TokenType.Jr_KEY,new Function(Token.TokenType.Jr_KEY,Token.TokenType.Register));
 
-			_function.Add(Token.TokenType.Lb_KEY,new Function(Token.TokenType.Lb_KEY,Token.TokenType.Register,Token.TokenType.Address));
-			_function.Add(Token.TokenType.Lw_KEY,new Function(Token.TokenType.Lw_KEY,Token.TokenType.Register,Token.TokenType.Address));
-			_function.Add(Token.TokenType.Sb_KEY,new Function(Token.TokenType.Sb_KEY,Token.TokenType.Register,Token.TokenType.Address));
-			_function.Add(Token.TokenType.Sw_KEY,new Function(Token.TokenType.Sw_KEY,Token.TokenType.Register,Token.TokenType.Address));
+			_function.Add(Token.TokenType.Load_KEY,new Function(Token.TokenType.Load_KEY,Token.TokenType.Register,Token.TokenType.Address));
+			_function.Add(Token.TokenType.Save_KEY,new Function(Token.TokenType.Save_KEY,Token.TokenType.Register,Token.TokenType.Address));
 			_function.Add(Token.TokenType.Li_KEY,new Function(Token.TokenType.Li_KEY,Token.TokenType.Register,Token.TokenType.Const));
 			_function.Add(Token.TokenType.La_KEY,new Function(Token.TokenType.La_KEY,Token.TokenType.Register,Token.TokenType.Label_Address));
 

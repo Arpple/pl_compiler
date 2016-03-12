@@ -3,12 +3,14 @@
 ## .data
 <data_segment>	=>	<data_key> | <data_key> <data_st_list>
 <data_st_list>	=>	<data_st> | <data_st> <data_st_list>
-<data_st>	=>	<ascii_st> | <asciiz_st> | <word_st> | <space_st>
+<data_st>	=>    <asciiz_st> | <word_st> | <byte_st> | <space_st>
 
 ## data st
 <asciiz_st>	=>	<label> <asciiz_key> <str>
 <word_st>	=>	<label> <word_key> <word_list>
 <word_list>	=>	<const> | <const> , <word_list>
+<byte_st>   =>  <label> <byte_key> <byte_list>
+<byte_list> =>  <char> | <char> , <byte_list>
 <space_st>	=>	<label> <space_key>
 
 ## .text
@@ -46,13 +48,10 @@
 <jal_st>	=>	<jal_key> <addr>
 <jr_st>		=>	<jr_key> <addr>
 
-<la_st>		=>	<la_key> <reg> , <label_addr>
+<load_st>   =>  <load_key> <reg> <addr>
+<save_st>   =>  <save_key> <reg> <addr>
 <li_st>		=>	<li_key> <reg> , <const>
-<lb_st>		=>	<lb_key> <reg> , <addr>
-<lw_st>		=>	<lw_key> <reg> , <addr>
-
-<sb_st>		=>	<sb_key> <reg> , <addr>
-<sw_st>		=>	<sw_key> <reg> , <addr>
+<la_st>		=>	<la_key> <reg> , <label_addr>
 
 <move_st>	=>	<move_key> <reg> , <reg>
 
