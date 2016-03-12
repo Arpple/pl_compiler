@@ -38,15 +38,15 @@ namespace PL
 			_function.Add(Token.TokenType.Ori_KEY,new Function(Token.TokenType.Ori_KEY,Token.TokenType.Register,Token.TokenType.Register,Token.TokenType.Const));
 			_function.Add(Token.TokenType.Nor_KEY,new Function(Token.TokenType.Nor_KEY,Token.TokenType.Register ,Token.TokenType.Register,Token.TokenType.Register));
 
-			_function.Add(Token.TokenType.Beq_KEY,new Function(Token.TokenType.Beq_KEY,Token.TokenType.Register,Token.TokenType.Register,Token.TokenType.Address));
-			_function.Add(Token.TokenType.Bnq_KEY,new Function(Token.TokenType.Bnq_KEY,Token.TokenType.Register,Token.TokenType.Register,Token.TokenType.Address));
-			_function.Add(Token.TokenType.Blt_KEY,new Function(Token.TokenType.Blt_KEY,Token.TokenType.Register,Token.TokenType.Register,Token.TokenType.Address));
-			_function.Add(Token.TokenType.Blte_KEY,new Function(Token.TokenType.Blte_KEY,Token.TokenType.Register,Token.TokenType.Register,Token.TokenType.Address));
-			_function.Add(Token.TokenType.Bgt_KEY,new Function(Token.TokenType.Bgt_KEY,Token.TokenType.Register,Token.TokenType.Register,Token.TokenType.Address));
-			_function.Add(Token.TokenType.Bgte_KEY,new Function(Token.TokenType.Bgte_KEY,Token.TokenType.Register,Token.TokenType.Register,Token.TokenType.Address));
+			_function.Add(Token.TokenType.Beq_KEY,new Function(Token.TokenType.Beq_KEY,Token.TokenType.Register,Token.TokenType.Register,Token.TokenType.Label_Address));
+			_function.Add(Token.TokenType.Bnq_KEY,new Function(Token.TokenType.Bnq_KEY,Token.TokenType.Register,Token.TokenType.Register,Token.TokenType.Label_Address));
+			_function.Add(Token.TokenType.Blt_KEY,new Function(Token.TokenType.Blt_KEY,Token.TokenType.Register,Token.TokenType.Register,Token.TokenType.Label_Address));
+			_function.Add(Token.TokenType.Blte_KEY,new Function(Token.TokenType.Blte_KEY,Token.TokenType.Register,Token.TokenType.Register,Token.TokenType.Label_Address));
+			_function.Add(Token.TokenType.Bgt_KEY,new Function(Token.TokenType.Bgt_KEY,Token.TokenType.Register,Token.TokenType.Register,Token.TokenType.Label_Address));
+			_function.Add(Token.TokenType.Bgte_KEY,new Function(Token.TokenType.Bgte_KEY,Token.TokenType.Register,Token.TokenType.Register,Token.TokenType.Label_Address));
 
-			_function.Add(Token.TokenType.Jump_KEY,new Function(Token.TokenType.Jump_KEY,Token.TokenType.Address));
-			_function.Add(Token.TokenType.Jal_KEY,new Function(Token.TokenType.Jal_KEY,Token.TokenType.Address));
+			_function.Add(Token.TokenType.Jump_KEY,new Function(Token.TokenType.Jump_KEY,Token.TokenType.Label_Address));
+			_function.Add(Token.TokenType.Jal_KEY,new Function(Token.TokenType.Jal_KEY,Token.TokenType.Label_Address));
 			_function.Add(Token.TokenType.Jr_KEY,new Function(Token.TokenType.Jr_KEY,Token.TokenType.Register));
 
 			_function.Add(Token.TokenType.Load_KEY,new Function(Token.TokenType.Load_KEY,Token.TokenType.Register,Token.TokenType.Address));

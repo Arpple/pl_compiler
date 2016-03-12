@@ -37,16 +37,16 @@
 <nor_st>	=>	<nor_key> <reg> , <reg> , <reg>
 
 
-<beq_st>	=>	<beq_key> <reg> , <reg> , <addr>
-<bnq_st>	=>	<bnq_key> <reg> , <reg> , <addr>
-<blt_st>	=>	<blt_key> <reg> , <reg> , <addr>
-<blte_st>	=>	<blte_key> <reg> , <reg> , <addr>
-<bgt_st>	=>	<bgt_key> <reg> , <reg> , <addr>
-<bgte_st>	=>	<bgte_key> <reg> , <reg> , <addr>
+<beq_st>	=>	<beq_key> <reg> , <reg> , <label_addr>
+<bnq_st>	=>	<bnq_key> <reg> , <reg> , <label_addr>
+<blt_st>	=>	<blt_key> <reg> , <reg> , <label_addr>
+<blte_st>	=>	<blte_key> <reg> , <reg> , <label_addr>
+<bgt_st>	=>	<bgt_key> <reg> , <reg> , <label_addr>
+<bgte_st>	=>	<bgte_key> <reg> , <reg> , <label_addr>
 
-<jump_st>	=>	<jump_key> <addr>
-<jal_st>	=>	<jal_key> <addr>
-<jr_st>		=>	<jr_key> <addr>
+<jump_st>	=>	<jump_key> <label_addr>
+<jal_st>	=>	<jal_key> <label_addr>
+<jr_st>		=>	<jr_key> <label_addr>
 
 <load_st>   =>  <load_key> <reg> <addr>
 <save_st>   =>  <save_key> <reg> <addr>
