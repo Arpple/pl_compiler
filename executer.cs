@@ -287,8 +287,6 @@ namespace PL
 #endregion
 
 #region Jump
-        public static Regex labelAdress = new Regex("^[0-9A-Za-z]+$");
-
         private void execute_jump(Code code)
         {
             //jump addr
@@ -310,17 +308,14 @@ namespace PL
 
         private void jump(string address)
         {
-            if(labelAdress.IsMatch(address))
+            CodeNode node = this.tree.getNodeFromLabel(address + ":");
+            if(node != null)
             {
-                CodeNode node = this.tree.getNodeFromLabel(address + ":");
-                if(node != null)
-                {
-                    this.current = node;
-                }
-                else
-                {
-                    Compiler.Error("Runtime","address " + address + " not found");
-                }
+                this.current = node;
+            }
+            else
+            {
+                Compiler.Error("Runtime","address " + address + " not found");
             }
         }
 
