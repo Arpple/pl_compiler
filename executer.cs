@@ -360,7 +360,7 @@ namespace PL
                 offset = int.Parse(addr_str[0]);
             int addr = regs.get(addr_str[1]);
             int val = regs.get(code.value(0));
-            Data.saveData(addr,offset,val);
+            Data.setData(addr,offset,val);
         }
 
         private void execute_li(Code code)
@@ -417,7 +417,20 @@ namespace PL
 
         private void syscall_print_string()
         {
-
+            string str = "";
+            int i = regs.get("$a0");
+            while(true)
+            {
+                char c = (char)Data.getData(i);
+                if(c == '\0')
+                    break;
+                else
+                {
+                    str += c;
+                    i++;
+                }
+            }
+            Console.WriteLine(str);
         }
 
         private void syscall_read_int()
@@ -429,12 +442,23 @@ namespace PL
 
         private void syscall_read_string()
         {
+            string input = "";
+            int bufferSize = regs.get("$a1");
 
+            input = Console.ReadLine();
+            int index = regs.get("$a0");
+            int i = 0;
+            for(; i < input.Length &&  i < bufferSize - 1; i++)
+            {
+                Data.setData(index,i,(int)input[i]);
+            }
+            Data.setData(index,i,(int)'\0');
         }
 
         private void syscall_exit()
         {
-
+            Console.WriteLine("Syscall Exit");
+            System.Environment.Exit(1);
         }
 #endregion
     }

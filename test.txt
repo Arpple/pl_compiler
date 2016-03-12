@@ -5,11 +5,6 @@ dt3: .asciiz "Arpple"
 dt4: .byte 'a','b'
 .text
 main:
-li  $t2 , 5
-la  $t1 , dt4
-load $t3 , ($t1)
-add $t3 , $t3 , $t2
-save $t3 , ($t1)
-load $t1 , ($t1)
+
 
 end:

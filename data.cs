@@ -9,41 +9,40 @@ namespace PL
         private static int lastAddress;
         //private static List<Data> dataList;
         private static int[] dataList;
-        private static Dictionary<string,int> dataTable;
+        private static Dictionary<string,Data> dataTable;
 
         public static void init()
         {
-            Console.WriteLine(Compiler.MemorySize);
             dataList = new int[Compiler.MemorySize];
-            dataTable = new Dictionary<string,int>();
+            dataTable = new Dictionary<string,Data>();
             lastAddress = 0;
         }
 
         public static void print()
         {
-            foreach(KeyValuePair<string,int> entry in dataTable)
+            foreach(KeyValuePair<string,Data> entry in dataTable)
             {
-                Console.WriteLine(entry.Key + " " + dataList[entry.Value]);
+                Console.WriteLine(entry.Key + " " + entry.Value);
             }
         }
 
-        public static int getData(int address,int offset)
+        public static int getData(int address,int offset = 0)
         {
             return dataList[address + offset];
         }
 
-        public static void saveData(int address,int offset, int value)
+        public static void setData(int address,int offset, int value)
         {
             dataList[address + offset] = value;
         }
 
         public static int getAddress(string label)
         {
-            int addr = -1;
-            dataTable.TryGetValue(label,out addr);
-            if(addr < 0)
+            Data dt = null;
+            dataTable.TryGetValue(label,out dt);
+            if(dt == null)
                 Compiler.Error("Runtime","cannot get address from " + label);
-            return addr;
+            return dt.address;
         }
 
 #endregion
@@ -65,7 +64,7 @@ namespace PL
                 case Token.TokenType.Space_KEY : init_space(args); break;
             }
 
-            dataTable.Add(label.value, this.address);
+            dataTable.Add(label.value, this);
         }
 
         public void alloc(int size)
@@ -86,7 +85,7 @@ namespace PL
             string ret = "Dx" + this.address + " : ";
             if(this.type == Token.TokenType.Asciiz_KEY)
             {
-                ret += '\"';
+                ret += "\"";
                 int i = this.address;
                 char c = (char)dataList[i];
                 while(c != '\0')
@@ -95,28 +94,28 @@ namespace PL
                     i++;
                     c = (char)dataList[i];
                 }
-                ret += '\"';
+                ret += "\"";
             }
             else if(this.type == Token.TokenType.Word_KEY)
             {
-                for(int i=this.address; i < this.size - 1; i++)
+                for(int i=this.address; i < this.address + this.size - 1; i++)
                 {
-                    ret += dataList[i] + ',';
+                    ret += dataList[i].ToString() + ',';
                 }
                 ret += dataList[this.address + this.size - 1];
             }
             else if(this.type == Token.TokenType.Byte_KEY)
             {
-                for(int i=this.address; i < this.size - 1; i++)
+                for(int i=this.address; i < this.address + this.size - 1; i++)
                 {
                     ret += "\'" + (char)dataList[i] + "\',";
                 }
-                ret += '\'' + (char)dataList[this.address + this.size - 1] + '\'';
+                ret += "\'" + (char)dataList[this.address + this.size - 1] + "\'";
             }
             else if(this.type == Token.TokenType.Space_KEY)
             {
                 ret += '\"';
-                for(int i=this.address; i < this.size; i++)
+                for(int i=this.address; i < this.address + this.size; i++)
                 {
                     if((char)dataList[i] == '\0')
                     {
@@ -134,12 +133,12 @@ namespace PL
         {
             //str => int[]
             string str = args[0].value.Trim(new char[]{'\"'});
-            alloc(str.Length);
+            alloc(str.Length + 1);
             for(int i=0; i < str.Length; i++)
             {
                 dataList[this.address + i] = (int)str[i];
             }
-
+            dataList[this.address + str.Length] = (int)'\0';
         }
 
         private void init_space(Token[] args)
