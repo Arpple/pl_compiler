@@ -27,7 +27,8 @@ namespace PL
 				while( (line = file.ReadLine()) != null )
 				{
 					lineNumber++;
-					string[] splitComma = line.Split(',');
+					string code = line.Split('#')[0];
+					string[] splitComma = code.Split(',');
 
 					for(int i=0;i < splitComma.Length; i++)
 					{
