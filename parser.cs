@@ -112,6 +112,7 @@ namespace PL
             {
                 case Token.TokenType.Asciiz_KEY : asciiz_st(label); break;
                 case Token.TokenType.Word_KEY : word_st(label); break;
+                case Token.TokenType.Byte_KEY : byte_st(label); break;
                 case Token.TokenType.Space_KEY : space_st(label); break;
                 default : Compiler.Error("Parser>data_st","wtf, why you give me " + token.ToString() + " in line " + token.lineNumber ); break;
             }
@@ -151,13 +152,38 @@ namespace PL
             nextLine();
         }
 
+        private void byte_st(Token label)
+        {
+            Token key = token;
+            nextToken();    //consume key
+
+            List<Token> args_list = new List<Token>();
+
+            check(Token.TokenType.Char);
+            args_list.Add(token);
+            nextToken();
+            while(token.type == Token.TokenType.Comma_KEY)
+            {
+                nextToken(); //consume comma
+                check(Token.TokenType.Char);
+                args_list.Add(token);
+                nextToken(); // consume arg
+            }
+            new Data(label,key,args_list.ToArray());
+            nextLine();
+        }
+
         private void space_st(Token label)
         {
             Token key = token;
             nextToken();    //consume key
+
+            check(Token.TokenType.Const);
+            Token arg = token;
+            nextToken();
             nextLine();
 
-            new Data(label,key);
+            new Data(label,key,arg);
         }
 #endregion
 

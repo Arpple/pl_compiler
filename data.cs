@@ -24,13 +24,13 @@ namespace PL
                 Console.WriteLine(entry.Key + " " + dataList[entry.Value]);
             }
         }
+
 #endregion
 
         public Token.TokenType type;
         public int address;
 
-        private int[] _value_intArray;
-        private string _value_string;
+        private int[] _value;
 
         public Data(Token label, Token key, params Token[] args)
         {
@@ -38,7 +38,8 @@ namespace PL
             {
                 case Token.TokenType.Asciiz_KEY : init_asciiz(args); break;
                 case Token.TokenType.Word_KEY : init_word(args); break;
-                case Token.TokenType.Space_KEY : init_space(); break;
+                case Token.TokenType.Byte_KEY : init_byte(args); break;
+                case Token.TokenType.Space_KEY : init_space(args); break;
             }
 
             this.type = key.type;
@@ -51,17 +52,44 @@ namespace PL
         public override string ToString()
         {
             string ret = "Dx" + this.address + " : ";
-            if(type == Token.TokenType.Word_KEY)
+            if(this.type == Token.TokenType.Asciiz_KEY)
             {
-                for(int i=0; i < _value_intArray.Length - 1; i++)
+                char[] char_val = new char[this._value.Length];
+                for(int i=0; i < this._value.Length; i++)
                 {
-                    ret += _value_intArray[i] + ",";
+                    char_val[i] = (char)this._value[i];
                 }
-                ret += _value_intArray[_value_intArray.Length - 1];
+                ret += new string(char_val);
             }
-            else
+            else if(this.type == Token.TokenType.Word_KEY)
             {
-                ret += _value_string;
+                for(int i=0; i < this._value.Length - 1; i++)
+                {
+                    ret += this._value[i] + ",";
+                }
+                ret += this._value[this._value.Length - 1];
+            }
+            else if(this.type == Token.TokenType.Byte_KEY)
+            {
+                for(int i=0; i < this._value.Length - 1; i++)
+                {
+                    ret += "\'" + ((char)this._value[i]).ToString() + "\',";
+                }
+                ret += ((char)this._value[this._value.Length - 1]).ToString();
+            }
+            else if(this.type == Token.TokenType.Space_KEY)
+            {
+                ret += "\"";
+                char[] char_val = new char[this._value.Length];
+                for(int i=0; i < this._value.Length; i++)
+                {
+                    if((char)char_val[i] == '\0')
+                    {
+                        break;
+                    }
+                    ret += (char)this._value[i];
+                }
+                ret += "\"";
             }
 
             return ret;
@@ -69,43 +97,49 @@ namespace PL
 
         private void init_asciiz(Token[] args)
         {
-            this._value_string = args[0].value;
+            //str => int[]
+            string str = args[0].value.Trim(new char[]{'\"'});
+            this._value = new int[str.Length];
+
+            for(int i=0; i < str.Length; i++)
+            {
+                this._value[i] = (int)str[i];
+            }
         }
 
-        private void init_space()
+        private void init_space(Token[] args)
         {
-            this._value_string = "";
+            int size = int.Parse(args[0].value);
+            if(size <= 0)
+                Compiler.Error("Parser-Data","Cannnot allocate space of size " + size);
+            this._value = new int[size];
+            this._value[0] = (int)'\0';
         }
 
         private void init_word(Token[] args)
         {
-            this._value_intArray = new int[args.Length];
+            this._value = new int[args.Length];
             for(int i=0; i < args.Length; i++)
             {
-                this._value_intArray[i] = int.Parse(args[i].value);
+                this._value[i] = int.Parse(args[i].value);
             }
         }
 
-        public int getInt(int index)
+        private void init_byte(Token[] args)
         {
-            if(index < 0 || index >= this._value_intArray.Length) Compiler.Error("Runtime","Index out of range");
-            return this._value_intArray[index];
+            this._value = new int[args.Length];
+            for(int i=0; i < args.Length; i++)
+            {
+                char c = args[i].value.Trim(new char[] {'\''})[0];
+                this._value[i] = (int)c;
+            }
         }
 
-        public void setInt(int index, int value)
+        public int get(int index)
         {
-            if(index < 0 || index >= this._value_intArray.Length) Compiler.Error("Runtime","Index out of range");
-            this._value_intArray[index] = value;
-        }
-
-        public string getString()
-        {
-            return this._value_string;
-        }
-
-        public void setString(string value)
-        {
-            this._value_string = value;
+            if(index < 0 || index >= this._value.Length)
+                Compiler.Error("RunTime","index out of range");
+            return this._value[index];
         }
     }
 }

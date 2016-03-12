@@ -128,9 +128,10 @@ namespace PL
             int result = regs.get(code.value(1)) / int.Parse(code.value(2));
             regs.set(code.value(0),result);
         }
-#endregion
+        #endregion
 
 #region Logic_Op
+    #region And
         private void execute_and(Code code)
         {
             //and $0 $1 $2 => $0 = $1 & $2
@@ -139,6 +140,7 @@ namespace PL
             int result = and(x,y);
             regs.set(code.value(0), result);
         }
+    #endregion
 
         private void execute_andi(Code code)
         {
@@ -329,6 +331,30 @@ namespace PL
         }
 #endregion
 
+#region Save/Load
+    private void execute_la(Code code)
+    {
+        //la $0 , label
+        //$regs
+    }
+
+    private void execute_li(Code code)
+    {
+        //li $0 , x
+        regs.set(code.value(0),int.Parse(code.value(1)));
+    }
+
+    private void execute_lb(Code code)
+    {
+        //lb $0 , data
+    }
+
+    private void execute_lw(Code code)
+    {
+        //lw $0 , offset(word)
+
+    }
+#endregion
 
     }
 }

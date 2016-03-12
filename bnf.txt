@@ -46,16 +46,16 @@
 <jal_st>	=>	<jal_key> <addr>
 <jr_st>		=>	<jr_key> <addr>
 
+<la_st>		=>	<la_key> <reg> , <label_addr>
+<li_st>		=>	<li_key> <reg> , <const>
 <lb_st>		=>	<lb_key> <reg> , <addr>
 <lw_st>		=>	<lw_key> <reg> , <addr>
 
 <sb_st>		=>	<sb_key> <reg> , <addr>
 <sw_st>		=>	<sw_key> <reg> , <addr>
 
-<li_st>		=>	<li_key> <reg> , <const>
 <move_st>	=>	<move_key> <reg> , <reg>
 
-<la_st>		=>	<la_key> <reg> , <addr>
 <syscall_st>	=>	<syscall_key>
 
 ## addr , reg , etc
@@ -64,7 +64,8 @@
 
 =============================================================
 <data_key>	=>	.data
-<label>		=>	[A-Za-z9-9]*:
+<label>		=>	[A-Za-z0-9]*:
+<label_addr> => [A-Za-z0-9]*
 <str>		=>	"[A-Za-z0-9]*"
 <word>		=>	'[A-Za-z0-9]*'
 <const>		=>	0|[1-9][0-9]*

@@ -54,8 +54,9 @@ namespace PL
 			_function.Add(Token.TokenType.Sb_KEY,new Function(Token.TokenType.Sb_KEY,Token.TokenType.Register,Token.TokenType.Address));
 			_function.Add(Token.TokenType.Sw_KEY,new Function(Token.TokenType.Sw_KEY,Token.TokenType.Register,Token.TokenType.Address));
 			_function.Add(Token.TokenType.Li_KEY,new Function(Token.TokenType.Li_KEY,Token.TokenType.Register,Token.TokenType.Const));
+			_function.Add(Token.TokenType.La_KEY,new Function(Token.TokenType.La_KEY,Token.TokenType.Register,Token.TokenType.Label_Address));
+
 			_function.Add(Token.TokenType.Move_KEY,new Function(Token.TokenType.Move_KEY,Token.TokenType.Register,Token.TokenType.Register));
-			_function.Add(Token.TokenType.La_KEY,new Function(Token.TokenType.La_KEY,Token.TokenType.Register,Token.TokenType.Address));
 			_function.Add(Token.TokenType.Syscall_KEY,new Function(Token.TokenType.Syscall_KEY));
 		}
 

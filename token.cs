@@ -10,9 +10,9 @@ namespace PL
 		public enum TokenType
 		{
 			//data key
-			Ascii_KEY,
 			Asciiz_KEY,
 			Word_KEY,
+			Byte_KEY,
 			Space_KEY,
 
 			//function key
@@ -27,27 +27,32 @@ namespace PL
 			Muli_KEY,
 			Div_KEY,
 			Divi_KEY,
+
 			And_KEY,
 			Andi_KEY,
 			Or_KEY,
 			Ori_KEY,
 			Nor_KEY,
+
 			Beq_KEY,
 			Bnq_KEY,
 			Blt_KEY,
 			Blte_KEY,
 			Bgt_KEY,
 			Bgte_KEY,
+
 			Jump_KEY,
 			Jal_KEY,
 			Jr_KEY,
+
 			Lb_KEY,
 			Lw_KEY,
 			Sb_KEY,
 			Sw_KEY,
 			Li_KEY,
-			Move_KEY,
 			La_KEY,
+
+			Move_KEY,
 			Syscall_KEY,
 
 			//terminal key
@@ -58,9 +63,10 @@ namespace PL
 			Register,
 			Const,
 			String,
+			Char,
 			Address,
-			Label,
-			Word,
+			Label_Address,
+			Label
 		}
 
 		private static Dictionary<TokenType,string> regEx;
@@ -69,13 +75,14 @@ namespace PL
 		{
 			regEx = new Dictionary<TokenType,string>();
 
-			regEx.Add(TokenType.Ascii_KEY,"^\\.ascii$");
 			regEx.Add(TokenType.Asciiz_KEY,"^\\.asciiz$");
 			regEx.Add(TokenType.Word_KEY,"^\\.word$");
+			regEx.Add(TokenType.Byte_KEY,"^\\.byte$");
 			regEx.Add(TokenType.Space_KEY,"^\\.space$");
 
 			regEx.Add(TokenType.Data_KEY,"^\\.data$");
 			regEx.Add(TokenType.Text_KEY,"^\\.text$");
+
 			regEx.Add(TokenType.Add_KEY,"^add$");
 			regEx.Add(TokenType.Addi_KEY,"^addi$");
 			regEx.Add(TokenType.Sub_KEY,"^sub$");
@@ -84,27 +91,32 @@ namespace PL
 			regEx.Add(TokenType.Muli_KEY,"^muli$");
 			regEx.Add(TokenType.Div_KEY,"^div$");
 			regEx.Add(TokenType.Divi_KEY,"^divi$");
+
 			regEx.Add(TokenType.And_KEY,"^and$");
 			regEx.Add(TokenType.Andi_KEY,"^andi$");
 			regEx.Add(TokenType.Or_KEY,"^or$");
 			regEx.Add(TokenType.Ori_KEY,"^ori$");
 			regEx.Add(TokenType.Nor_KEY,"^nor$");
+
 			regEx.Add(TokenType.Beq_KEY,"^beq$");
 			regEx.Add(TokenType.Bnq_KEY,"^bnq$");
 			regEx.Add(TokenType.Blt_KEY,"^blt$");
 			regEx.Add(TokenType.Blte_KEY,"^blte$");
 			regEx.Add(TokenType.Bgt_KEY,"^bgt$");
 			regEx.Add(TokenType.Bgte_KEY,"^bgte$");
+
 			regEx.Add(TokenType.Jump_KEY,"^jump$");
 			regEx.Add(TokenType.Jal_KEY,"^jal$");
 			regEx.Add(TokenType.Jr_KEY,"^jr$");
+
 			regEx.Add(TokenType.Lb_KEY,"^lb$");
 			regEx.Add(TokenType.Lw_KEY,"^lw$");
 			regEx.Add(TokenType.Sb_KEY,"^sb$");
 			regEx.Add(TokenType.Sw_KEY,"^sw$");
 			regEx.Add(TokenType.Li_KEY,"^li$");
-			regEx.Add(TokenType.Move_KEY,"^move$");
 			regEx.Add(TokenType.La_KEY,"^la$");
+
+			regEx.Add(TokenType.Move_KEY,"^move$");
 			regEx.Add(TokenType.Syscall_KEY,"^syscall$");
 
 			regEx.Add(TokenType.Comma_KEY,"^,$");
@@ -113,7 +125,9 @@ namespace PL
 			regEx.Add(TokenType.Register,"^\\$[0-9A-Za-z]*$");
 			regEx.Add(TokenType.Const,"^[0-9]+$");
 			regEx.Add(TokenType.String,"^\\\"[0-9A-Za-z]*\\\"$");
-			regEx.Add(TokenType.Address,"^[0-9A-Za-z]+$|^\\(\\$[0-9A-Za-z]+\\)$");
+			regEx.Add(TokenType.Char,"^\\\'[0-9A-Za-z]*\\\'$");
+			regEx.Add(TokenType.Address,"^[0-9]*?\\(\\$[0-9A-Za-z]+\\)$");
+			regEx.Add(TokenType.Label_Address,"^[0-9A-Za-z]+$");
 			regEx.Add(TokenType.Label,"^[0-9A-Za-z]+:$");
 		}
 
