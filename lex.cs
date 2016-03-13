@@ -2,21 +2,19 @@ using System;
 using System.IO;
 using System.Text;
 using System.Collections.Generic;
-
+#pragma warning disable 0168
 namespace PL
 {
 	public class Lex
 	{
 		private List<Token> tokens;
 
-		public Lex(string sourcePath)
+		public Lex()
 		{
-			if(Compiler.DEBUG)
-			{
-				Console.WriteLine("=====================================");
-				Console.WriteLine("-- Lex --");
-			}
+			Compiler.debug("=====================================");
+			Compiler.debug("Lex analyze ...");
 
+			string sourcePath = Compiler.TargetFile;
 			this.tokens = new List<Token>();
 
 			string line;
@@ -25,7 +23,8 @@ namespace PL
 				using (var file = new StreamReader(sourcePath, Encoding.Default))
 				{
 					int lineNumber = 0;
-					Compiler.log("-Matching Regex-");
+					Compiler.verbose("Matching Regex ...");
+					Token.initRegex();
 					while( (line = file.ReadLine()) != null )
 					{
 						lineNumber++;
@@ -62,9 +61,9 @@ namespace PL
 
 					if(Compiler.DEBUG)
 					{
-						Compiler.log("\nLexer analyzed completed");
-						Compiler.log("=====================================");
-			            Compiler.log("-- Token Stream --");
+						Compiler.debug("Lex analyzing completed");
+						Compiler.debug("=====================================");
+			            Compiler.debug("-- Token Stream --");
 						printTokens();
 					}
 				}

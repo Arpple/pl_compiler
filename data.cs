@@ -66,6 +66,7 @@ namespace PL
             }
 
             dataTable.Add(label.value, this);
+			Compiler.verbose(this);
         }
 
         public void alloc(int size)

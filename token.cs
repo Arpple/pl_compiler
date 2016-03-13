@@ -69,7 +69,7 @@ namespace PL
 
 		private static Dictionary<TokenType,string> regEx;
 
-		private static void initRegex()
+		public static void initRegex()
 		{
 			regEx = new Dictionary<TokenType,string>();
 
@@ -135,8 +135,7 @@ namespace PL
 
 		public static Token construct(string word,int lineNumber)
 		{
-			initRegex();
-
+			Compiler.verbose("matching " + word);
 			Array rxs = Enum.GetValues(typeof(TokenType));
 			foreach(TokenType type in rxs)
 			{
@@ -145,7 +144,7 @@ namespace PL
 				Regex rx = new Regex(rx_str);
 				if(rx.IsMatch(word))
 				{
-					//Compiler.log(word + " with " + rx_str);
+					Compiler.verbose("=" + type);
 					return new Token(type,word,lineNumber);
 				}
 			}

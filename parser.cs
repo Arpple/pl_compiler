@@ -29,22 +29,23 @@ namespace PL
 
         public Parser(List<Token> tokenStream)
         {
-            Compiler.log("=====================================");
-            Compiler.log("-- Parser --");
+            Compiler.debug("=====================================");
+            Compiler.debug("Parsing Tokens ...");
+
             this._tokenStream = tokenStream;
-            Function.initFunction();
             this.tree = new CodeTree();
+			Function.initFunction();
             Data.init();
             program();
 
             if(Compiler.DEBUG)
             {
-                Compiler.log("Parser completed");
-                Compiler.log("=====================================");
-                Compiler.log("-- Data --");
+                Compiler.debug("Parsing completed");
+                Compiler.debug("=====================================");
+                Compiler.debug("-- Data --");
                 Data.print();
-                Compiler.log("=====================================");
-                Compiler.log("-- Text --");
+                Compiler.debug("=====================================");
+                Compiler.debug("-- Text --");
                 tree.printTree();
             }
         }
@@ -94,6 +95,7 @@ namespace PL
 #region Data
         private void data_segment()
         {
+			Compiler.verbose("Data Segment:");
             check(Token.TokenType.Data_KEY);
             nextToken();
             nextLine();
@@ -197,6 +199,7 @@ namespace PL
 #region Text
         private void text_segment()
         {
+			Compiler.verbose("Text Segment:");
             check(Token.TokenType.Text_KEY);
             nextToken();
             nextLine();
@@ -209,6 +212,8 @@ namespace PL
             if(token == null) return;
             check(Token.TokenType.Label);
             tree.insertLabel(token.value);
+
+			Compiler.verbose(token.value);
 
             nextToken();    //consume Label
             nextLine();
@@ -263,6 +268,8 @@ namespace PL
             //create code node
             CodeNode node = new CodeNode(tree.nextAddress(),keyToken, argsToken);
             tree.insertNode(node);
+
+			Compiler.verbose("\t" + node);
         }
 #endregion
 

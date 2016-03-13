@@ -20,8 +20,8 @@ namespace PL
 
         public Executer(CodeTree tree)
         {
-            Compiler.log("=====================================");
-            Compiler.log("-- Runtime --");
+            Compiler.debug("=====================================");
+            Compiler.debug("-- Runtime --");
             this.current = tree.root.next;
             this.regs = new Registers();
             this.tree = tree;
@@ -36,13 +36,13 @@ namespace PL
                 next();
             }
 
-            Compiler.log("=====================================");
-            Compiler.log("Debug Result of $t1 : " + regs.get("$t1"));
+            Compiler.debug("\n=====================================");
+            Compiler.debug("Debug Result of $t1 : " + regs.get("$t1"));
         }
 
         private void execute(Code code)
         {
-            Compiler.log("Executing : "+ current);
+            Compiler.verbose("Executing : "+ current);
 
             switch(code.key.type)
             {

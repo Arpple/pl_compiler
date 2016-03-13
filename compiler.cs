@@ -8,22 +8,16 @@ namespace PL
 	public class Compiler
 	{
 		public static bool DEBUG;
-		private static string path;
+		public static bool VERBOSE;
+		public static string TargetFile;
 		public static int MemorySize;
-
-		private static void init()
-		{
-			DEBUG = false;
-			MemorySize = 500;
-		}
 
 		public static void Main(string[] args)
 		{
 			Stopwatch sw = Stopwatch.StartNew();
-			init();
 			parseArgument(args);
 
-			Lex lex = new Lex(path);
+			Lex lex = new Lex();
 			Parser parser = new Parser(lex.getTokenStream());
 
 			sw.Stop();
@@ -31,19 +25,26 @@ namespace PL
 
 			Executer exe = new Executer(parser.getTree());
 
+			Console.WriteLine();
 			Compiler.Success("executing completed");
 			System.Environment.Exit(0);
 		}
 
-
-
 		private static void parseArgument(string[] args)
 		{
-			bool paramFile = false;
+			TargetFile = "test.txt";
+			DEBUG = false;
+			VERBOSE = false;
+			MemorySize = 500;
+
 			if(args.Length > 0)
 			{
 				for(int i = 0; i < args.Length; i++)
 				{
+					if(args[i] == "--help")
+					{
+						help();
+					}
 					if(args[i] == "-t")
 					{
 						test();
@@ -53,11 +54,14 @@ namespace PL
 					{
 						DEBUG = true;
 					}
+					if(args[i] == "-v")
+					{
+						VERBOSE = true;
+					}
 					if(args[i] == "-f")
 					{
-						paramFile = true;
 						if(i + 1 < args.Length)
-							path = args[i+1];
+							TargetFile = args[i+1];
 						else
 							Error("SysArg","you should tell me where the file is");
 						i++;
@@ -82,10 +86,21 @@ namespace PL
 						i++;
 					}
 				}
-
 			}
-			if(!paramFile)	path = "test.txt";
+		}
 
+		private static void help()
+		{
+			Console.WriteLine("(-ＯvＯ*) <[");
+
+			Console.WriteLine("-- Usage: Compiler.exe [-f file][-d][-m size]");
+			Console.WriteLine("  -f file       compile and run target file (default 'test.txt')");
+			Console.WriteLine("  -m size       allocate memory of specific size (default 500)");
+			Console.WriteLine("  -d            show debug");
+			Console.WriteLine("  -v            show verbose");
+
+			Console.WriteLine("]");
+			System.Environment.Exit(0);
 		}
 
 		public static void Error(string header, string msg)
@@ -104,9 +119,22 @@ namespace PL
 			Console.WriteLine("( ＞▽＜) <[" + msg + "]");
 		}
 
-		public static void log(params object[] args)
+		public static void debug(params object[] args)
 		{
 			if(DEBUG)
+			{
+				string msg = "";
+				foreach(object arg in args)
+				{
+					msg += arg.ToString();
+				}
+				Console.WriteLine(msg);
+			}
+		}
+
+		public static void verbose(params object[] args)
+		{
+			if(VERBOSE)
 			{
 				string msg = "";
 				foreach(object arg in args)
