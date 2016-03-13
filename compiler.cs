@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 
 #pragma warning disable 0219
 
@@ -18,12 +19,20 @@ namespace PL
 
 		public static void Main(string[] args)
 		{
+			Stopwatch sw = Stopwatch.StartNew();
 			init();
 			parseArgument(args);
-			
+
 			Lex lex = new Lex(path);
 			Parser parser = new Parser(lex.getTokenStream());
+
+			sw.Stop();
+			Compiler.Success("compiling completed in " + sw.Elapsed + " ,executing program");
+
 			Executer exe = new Executer(parser.getTree());
+
+			Compiler.Success("executing completed");
+			System.Environment.Exit(0);
 		}
 
 
@@ -38,7 +47,7 @@ namespace PL
 					if(args[i] == "-t")
 					{
 						test();
-						System.Environment.Exit(1);
+						System.Environment.Exit(0);
 					}
 					if(args[i] == "-d")
 					{
@@ -82,12 +91,17 @@ namespace PL
 		public static void Error(string header, string msg)
 		{
 			Console.WriteLine("！Σ(￣□￣;) <[Error@" + header + ":" + msg +"]");
-			System.Environment.Exit(0);
+			System.Environment.Exit(1);
 		}
 
 		public static void Warning(string header, string msg)
 		{
 			Console.WriteLine("(ー_ー;) <[Warning@" + header + ":" + msg +"]");
+		}
+
+		public static void Success(string msg)
+		{
+			Console.WriteLine("( ＞▽＜) <[" + msg + "]");
 		}
 
 		public static void log(params object[] args)

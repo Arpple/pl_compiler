@@ -492,7 +492,7 @@ namespace PL
         private void syscall_exit()
         {
             Console.WriteLine("Syscall Exit");
-            System.Environment.Exit(1);
+            System.Environment.Exit(0);
         }
 #endregion
     }
