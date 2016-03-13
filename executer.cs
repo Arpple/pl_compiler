@@ -407,7 +407,7 @@ namespace PL
 
         private void syscall_print_int()
         {
-            Console.WriteLine(regs.get("$a0"));
+            Console.Write(regs.get("$a0"));
         }
 
         private void syscall_print_string()
@@ -425,7 +425,7 @@ namespace PL
                     i++;
                 }
             }
-            Console.WriteLine(str);
+            Console.Write(str);
         }
 
         private void syscall_read_int()

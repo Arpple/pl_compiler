@@ -96,9 +96,8 @@ namespace PL
 
 		public static void test()
 		{
-			int i = 0;
-			int.TryParse(Console.ReadLine(),out i);
-			Console.WriteLine(i);
+			string x = "		la	\" string here , \"		$a0 ";
+			Lex.SplitString(x,' ','\t');
 		}
 	}
 }
