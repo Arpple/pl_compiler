@@ -23,7 +23,7 @@ namespace PL
 
         public override string ToString()
         {
-            string str = key.value + "  ";
+            string str = key.value + " ";
             foreach(Token arg in args)
             {
                 str += arg.value + " ";

@@ -47,7 +47,7 @@ namespace PL
 			}
 			else
 			{
-				Compiler.Error("Code","register " + registerName + " not found");
+				Compiler.Error("Runtime","register " + registerName + " not found");
 			}
 		}
 
@@ -59,7 +59,7 @@ namespace PL
 			}
 			else
 			{
-				Compiler.Error("Code","register " + registerName + " not found");
+				Compiler.Error("Runtime","register " + registerName + " not found");
 			}
 			return 0;
 		}

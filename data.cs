@@ -40,9 +40,10 @@ namespace PL
         {
             Data dt = null;
             dataTable.TryGetValue(label,out dt);
-            if(dt == null)
-                Compiler.Error("Runtime","cannot get address from " + label);
-            return dt.address;
+			if(dt == null)
+				return -1;
+            else
+				return dt.address;
         }
 
 #endregion
@@ -76,7 +77,7 @@ namespace PL
             }
             else
             {
-                Compiler.Error("Data","not enough memory space, try config with -m <mem_size>");
+                Compiler.Error("Memmory","not enough memory space, try config with -m <mem_size>");
             }
         }
 
@@ -145,7 +146,7 @@ namespace PL
         {
             int size = int.Parse(args[0].value);
             if(size <= 0)
-                Compiler.Error("Parser-Data","Cannnot allocate space of size " + size);
+                Compiler.Error("Data","#" + args[0].lineNumber + " :cannnot allocate space of size " + size);
             alloc(size);
             dataList[this.address] = '\0';
         }
@@ -167,13 +168,6 @@ namespace PL
                 char c = args[i].value.Trim(new char[] {'\''})[0];
                 dataList[this.address + i] = (int)c;
             }
-        }
-
-        public int get(int index)
-        {
-            if(index < 0 || index >= Compiler.MemorySize)
-                Compiler.Error("RunTime","index out of range");
-            return dataList[index];
         }
     }
 }

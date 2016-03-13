@@ -20,7 +20,7 @@ namespace PL
 		{
 			init();
 			parseArgument(args);
-			//Lex lex = new Lex("/home/arpple/Desktop/file/prog_lang/test.txt");
+			
 			Lex lex = new Lex(path);
 			Parser parser = new Parser(lex.getTokenStream());
 			Executer exe = new Executer(parser.getTree());
@@ -50,7 +50,7 @@ namespace PL
 						if(i + 1 < args.Length)
 							path = args[i+1];
 						else
-							Error("Compiler","pls enter file name after -f");
+							Error("SysArg","you should tell me where the file is");
 						i++;
 					}
 					if(args[i] == "-m")
@@ -63,9 +63,13 @@ namespace PL
 							{
 								MemorySize = m;
 							}
+							else
+							{
+								Warning("SysArg","memory size '" + args[i+1] + "' is weird so im gonna go with " + MemorySize);
+							}
 						}
 						else
-							Error("Compiler","pls enter memory size");
+							Error("SysArg","you should tell me how much memory you want");
 						i++;
 					}
 				}
@@ -77,8 +81,13 @@ namespace PL
 
 		public static void Error(string header, string msg)
 		{
-			Console.WriteLine("ERROR> " + header + " : " + msg);
+			Console.WriteLine("！Σ(￣□￣;) <[Error@" + header + ":" + msg +"]");
 			System.Environment.Exit(0);
+		}
+
+		public static void Warning(string header, string msg)
+		{
+			Console.WriteLine("(ー_ー;) <[Warning@" + header + ":" + msg +"]");
 		}
 
 		public static void log(params object[] args)

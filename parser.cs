@@ -5,6 +5,13 @@ namespace PL
 {
     public class Parser
     {
+#region Static
+		private static void Error(string msg)
+		{
+			Compiler.Error("Parser",msg);
+		}
+#endregion
+
         private List<Token> _tokenStream;
         private Token token
         {
@@ -61,11 +68,11 @@ namespace PL
         {
             if(token == null)
             {
-                Compiler.Error("Parser", "syntax error " + token.ToString() + " in line " + token.lineNumber);
+                Error("there should be more " + type + " at the end");
             }
             if(token.type != type)
             {
-                Compiler.Error("Parser", "syntax error expected token of type '" + type +  "' , found " + token.ToString() + " in line " + token.lineNumber);
+                Error("#" + token.lineNumber + " :It should be " + type + " but I found " + token);
             }
         }
 
@@ -114,7 +121,7 @@ namespace PL
                 case Token.TokenType.Word_KEY : word_st(label); break;
                 case Token.TokenType.Byte_KEY : byte_st(label); break;
                 case Token.TokenType.Space_KEY : space_st(label); break;
-                default : Compiler.Error("Parser>data_st","wtf, why you give me " + token.ToString() + " in line " + token.lineNumber ); break;
+                default : Error("#" + token.lineNumber + " :" + token.type + " is not data type"); break;
             }
         }
 
@@ -232,7 +239,7 @@ namespace PL
         {
             //Console.WriteLine(token.lineNumber);
             Function f = Function.get(key);
-            if(f == null) Compiler.Error("Parser-text_st","no function " + key);
+            if(f == null) Error("#" + token.lineNumber + " :no function of type " + key);
             check(f.key);
             Token keyToken = token;
             nextToken();

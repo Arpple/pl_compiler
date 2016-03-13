@@ -20,50 +20,58 @@ namespace PL
 			this.tokens = new List<Token>();
 
 			string line;
-			using (var file = new StreamReader(sourcePath, Encoding.Default))
+			try
 			{
-				int lineNumber = 0;
-				Compiler.log("-Matching Regex-");
-				while( (line = file.ReadLine()) != null )
+				using (var file = new StreamReader(sourcePath, Encoding.Default))
 				{
-					lineNumber++;
-					string[] code_comment = SplitString(line,'#');
-					if(code_comment.Length == 0) continue;
-					string code = code_comment[0];
-					string[] splitComma = SplitString(code,',');
-
-					for(int i=0;i < splitComma.Length; i++)
+					int lineNumber = 0;
+					Compiler.log("-Matching Regex-");
+					while( (line = file.ReadLine()) != null )
 					{
-						foreach(string word in SplitString(splitComma[i],' ','\t'))
-						{
-							if(word.Length == 0) continue;
-							Token newToken = Token.construct(word,lineNumber);
-							if(newToken != null)
-							{
-								this.tokens.Add(newToken);
-							}
-							else
-							{
-								Compiler.Error("Lexer","'" + word + "' is not match any token, in line " + lineNumber);
-							}
-						}
-						if(i < splitComma.Length - 1)
-						{
-							this.tokens.Add(new Token(Token.TokenType.Comma_KEY, ",", lineNumber));
-						}
-					}
-					//End Line
-					this.tokens.Add(new Token(Token.TokenType.Endl_KEY,"", lineNumber));
-				}
-				file.Close();
+						lineNumber++;
+						string[] code_comment = SplitString(line,'#');
+						if(code_comment.Length == 0) continue;
+						string code = code_comment[0];
+						string[] splitComma = SplitString(code,',');
 
-				if(Compiler.DEBUG)
-				{
-					Compiler.log("\nLexer analyzed completed");
-					Compiler.log("=====================================");
-		            Compiler.log("-- Token Stream --");
-					printTokens();
+						for(int i=0;i < splitComma.Length; i++)
+						{
+							foreach(string word in SplitString(splitComma[i],' ','\t'))
+							{
+								if(word.Length == 0) continue;
+								Token newToken = Token.construct(word,lineNumber);
+								if(newToken != null)
+								{
+									this.tokens.Add(newToken);
+								}
+								else
+								{
+									//no any token match
+									Compiler.Error("Lexer","#" + lineNumber + " '" + word + "' is not valid");
+								}
+							}
+							if(i < splitComma.Length - 1)
+							{
+								this.tokens.Add(new Token(Token.TokenType.Comma_KEY, ",", lineNumber));
+							}
+						}
+						//End Line
+						this.tokens.Add(new Token(Token.TokenType.Endl_KEY,"", lineNumber));
+					}
+					file.Close();
+
+					if(Compiler.DEBUG)
+					{
+						Compiler.log("\nLexer analyzed completed");
+						Compiler.log("=====================================");
+			            Compiler.log("-- Token Stream --");
+						printTokens();
+					}
 				}
+			}
+			catch(Exception e)
+			{
+				Compiler.Error("System","file '" + sourcePath + "' not found");
 			}
 		}
 

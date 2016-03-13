@@ -6,6 +6,14 @@ namespace PL
 {
     public class Executer
     {
+#region Static
+		private static void Error(Code code,string msg)
+		{
+			Compiler.Error("Runtime","#" + code.key.lineNumber + "=" + code + ":" + msg);
+		}
+#endregion
+
+
         private CodeTree tree;
         private CodeNode current;
         private Registers regs;
@@ -247,42 +255,66 @@ namespace PL
         {
             //beq $0 $1 addr => if $0 == $1 , jump addr
             bool result = regs.get(code.value(0)) == regs.get(code.value(1));
-            if(result) jump(code.value(2));
+            if(result)
+			{
+				if(!jump(code.value(2)))
+					Error(code,"I can't jump to that!!");
+			}
         }
 
         private void execute_bnq(Code code)
         {
             //beq $0 $1 addr => if $0 != $1 , jump addr
             bool result = regs.get(code.value(0)) != regs.get(code.value(1));
-            if(result) jump(code.value(2));
+            if(result)
+			{
+				if(!jump(code.value(2)))
+					Error(code,"I can't jump to that!!");
+			}
         }
 
         private void execute_blt(Code code)
         {
             //blt $0 $1 addr => if $0 < $1 , jump addr
             bool result = regs.get(code.value(0)) < regs.get(code.value(1));
-            if(result) jump(code.value(2));
+            if(result)
+			{
+				if(!jump(code.value(2)))
+					Error(code,"I can't jump to that!!");
+			}
         }
 
         private void execute_blte(Code code)
         {
             //blte $0 $1 addr => if $0 <= $1 , jump addr
             bool result = regs.get(code.value(0)) <= regs.get(code.value(1));
-            if(result) jump(code.value(2));
+            if(result)
+			{
+				if(!jump(code.value(2)))
+					Error(code,"I can't jump to that!!");
+			}
         }
 
         private void execute_bgt(Code code)
         {
             //bgt $0 $1 addr => if $0 > $1 , jump addr
             bool result = regs.get(code.value(0)) > regs.get(code.value(1));
-            if(result) jump(code.value(2));
+            if(result)
+			{
+				if(!jump(code.value(2)))
+					Error(code,"I can't jump to that!!");
+			}
         }
 
         private void execute_bgte(Code code)
         {
             //bgte $0 $1 addr => if $0 >= $1 , jump addr
             bool result = regs.get(code.value(0)) >= regs.get(code.value(1));
-            if(result) jump(code.value(2));
+            if(result)
+			{
+				if(!jump(code.value(2)))
+					Error(code,"I can't jump to that!!");
+			}
         }
 #endregion
 
@@ -290,45 +322,50 @@ namespace PL
         private void execute_jump(Code code)
         {
             //jump addr
-            jump(code.value(0));
+            if(!jump(code.value(0)))
+				Error(code,"I can't jump to that!!");
         }
 
         private void execute_jal(Code code)
         {
             //jal addr => set $ra = current ,then jump
             regs.set("$ra",current.address);
-            jump(code.value(0));
+            if(!jump(code.value(0)))
+				Error(code,"I can't jump to that!!");
         }
 
         private void execute_jr(Code code)
         {
             //jr $0 => jump to address stored in reg
-            jumpAddress(regs.get(code.value(0)));
+            if(!jumpAddress(regs.get(code.value(0))))
+				Error(code,"I can't jump to that!!");
         }
 
-        private void jump(string address)
+        private bool jump(string address)
         {
             CodeNode node = this.tree.getNodeFromLabel(address + ":");
             if(node != null)
             {
                 this.current = node;
+				return true;
             }
             else
             {
-                Compiler.Error("Runtime","address " + address + " not found");
+                return false;
             }
         }
 
-        private void jumpAddress(int address)
+        private bool jumpAddress(int address)
         {
             CodeNode node = this.tree.getNodeFromAddress(address);
             if(node != null)
             {
-                this.current = node;
+				this.current = node;
+                return true;
             }
             else
             {
-                Compiler.Error("Runtime","address x" + address + " not found");
+				return false;
             }
         }
 #endregion
@@ -368,11 +405,13 @@ namespace PL
         {
             //la $0 , label => $0 = address of label
             int addr = Data.getAddress(code.value(1) + ":");
+			if(addr < 0)
+				Error(code,"address '" + code.value(1) + "' cannot be found");
             regs.set(code.value(0),addr);
         }
 #endregion
 
-#region sys
+#region Syscall
         private void execute_move(Code code)
         {
             //move $0 , $1 => $0 = 1
@@ -400,7 +439,7 @@ namespace PL
                 case Syscall.Read_String : syscall_read_string(); break;
                 case Syscall.Exit : syscall_exit(); break;
                 default :
-                    Compiler.Error("Runtime","op code " + op_code + " not supported");
+                    Error(code,"I can't do syscall with code " + op_code);
                     break;
             }
         }
