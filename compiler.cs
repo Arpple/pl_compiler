@@ -11,6 +11,7 @@ namespace PL
 		public static bool VERBOSE;
 		public static string TargetFile;
 		public static int MemorySize;
+		public static string Language;
 
 		public static void Main(string[] args)
 		{
@@ -36,6 +37,7 @@ namespace PL
 			DEBUG = false;
 			VERBOSE = false;
 			MemorySize = 500;
+			Language = "EN";
 
 			if(args.Length > 0)
 			{
@@ -85,6 +87,23 @@ namespace PL
 							Error("SysArg","you should tell me how much memory you want");
 						i++;
 					}
+					if(args[i] == "-l")
+					{
+						if(i + 1 < args.Length)
+						{
+							if(args[i+1] == "TH" || args[i+1] == "EN")
+							{
+								Language = args[i+1];
+							}
+							else
+							{
+								Warning("SysArg","language '" + args[i+1] + "' is too hard so im gonna go with " + Language);
+							}
+						}
+						else
+							Error("SysArg","you should tell me the language you want");
+						i++;
+					}
 				}
 			}
 		}
@@ -96,6 +115,7 @@ namespace PL
 			Console.WriteLine("-- Usage: Compiler.exe [-f file][-d][-m size]");
 			Console.WriteLine("  -f file       compile and run target file (default 'test.txt')");
 			Console.WriteLine("  -m size       allocate memory of specific size (default 500)");
+			Console.WriteLine("  -l lang       compile the text in specific language (TH/EN)(default EN)");
 			Console.WriteLine("  -d            show debug");
 			Console.WriteLine("  -v            show verbose");
 
