@@ -73,12 +73,20 @@ namespace PL
         {
             if(lastAddress + size <= Compiler.MemorySize)
             {
-                lastAddress += size;
-                this.size = size;
+				lastAddress += size;
+				this.size = size;
             }
             else
             {
-                Compiler.Error("Memmory","not enough memory space, try config with -m <mem_size>");
+				if(Compiler.AutoMemory)
+				{
+					int[] _dataList = new int[Compiler.MemorySize + 100];
+					Array.Copy(dataList, _dataList, Compiler.MemorySize);
+					dataList = _dataList;
+					Compiler.MemorySize += 100;
+				}
+				else
+				    Compiler.Error("Memmory","not enough memory space, try config with -m <mem_size>");
             }
         }
 

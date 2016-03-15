@@ -11,6 +11,7 @@ namespace PL
 		public static bool VERBOSE;
 		public static string TargetFile;
 		public static int MemorySize;
+		public static bool AutoMemory;
 		public static string Language;
 
 		public static void Main(string[] args)
@@ -37,6 +38,7 @@ namespace PL
 			DEBUG = false;
 			VERBOSE = false;
 			MemorySize = 500;
+			AutoMemory = false;
 			Language = "EN";
 
 			if(args.Length > 0)
@@ -72,15 +74,22 @@ namespace PL
 					{
 						if(i + 1 < args.Length)
 						{
-							int m = 0;
-							int.TryParse(args[i+1],out m);
-							if(m > 0)
+							if(args[i+1] == "auto")
 							{
-								MemorySize = m;
+								AutoMemory = true;
 							}
 							else
 							{
-								Warning("SysArg","memory size '" + args[i+1] + "' is weird so im gonna go with " + MemorySize);
+								int m = 0;
+								int.TryParse(args[i+1],out m);
+								if(m > 0)
+								{
+									MemorySize = m;
+								}
+								else
+								{
+									Warning("SysArg","memory size '" + args[i+1] + "' is weird so im gonna go with " + MemorySize);
+								}
 							}
 						}
 						else
@@ -112,12 +121,14 @@ namespace PL
 		{
 			Console.WriteLine("(-ＯvＯ*) <[");
 
-			Console.WriteLine("-- Usage: Compiler.exe [-f file][-d][-m size]");
+			Console.WriteLine("Usage: Compiler.exe [-f file][-m size][-l lang][-d][-v]");
 			Console.WriteLine("  -f file       compile and run target file (default 'test.txt')");
 			Console.WriteLine("  -m size       allocate memory of specific size (default 500)");
+			Console.WriteLine("                you can also enter size 'auto' to auto extend size of memory");
 			Console.WriteLine("  -l lang       compile the text in specific language (TH/EN)(default EN)");
 			Console.WriteLine("  -d            show debug");
 			Console.WriteLine("  -v            show verbose");
+
 
 			Console.WriteLine("]");
 			System.Environment.Exit(0);
