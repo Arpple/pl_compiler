@@ -100,7 +100,7 @@ namespace PL
 					{
 						if(i + 1 < args.Length)
 						{
-							if(args[i+1] == "TH" || args[i+1] == "EN")
+							if(args[i+1] == "TH" || args[i+1] == "th" || args[i+1] == "en" || args[i+1] == "EN")
 							{
 								Language = args[i+1];
 							}
@@ -117,6 +117,7 @@ namespace PL
 			}
 		}
 
+#region String
 		private static void help()
 		{
 			Console.WriteLine("(-ＯvＯ*) <[");
@@ -175,6 +176,7 @@ namespace PL
 				Console.WriteLine(msg);
 			}
 		}
+#endregion
 
 		public static void test()
 		{

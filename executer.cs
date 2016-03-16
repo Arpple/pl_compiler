@@ -146,7 +146,6 @@ namespace PL
         #endregion
 
 #region Logic_Op
-    #region And
         private void execute_and(Code code)
         {
             //and $0 $1 $2 => $0 = $1 & $2
@@ -155,7 +154,6 @@ namespace PL
             int result = and(x,y);
             regs.set(code.value(0), result);
         }
-    #endregion
 
         private void execute_andi(Code code)
         {
@@ -491,7 +489,7 @@ namespace PL
 
         private void syscall_exit()
         {
-            Console.WriteLine("Syscall Exit");
+            Compiler.Success("executing completed (exit by syscall)");
             System.Environment.Exit(0);
         }
 #endregion

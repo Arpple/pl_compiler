@@ -130,10 +130,10 @@ namespace PL
 			}
 			else if (Compiler.Language == "TH")
 			{
-				regEx.Add(TokenType.Asciiz_KEY,"^\\.asciiz$");
-				regEx.Add(TokenType.Word_KEY,"^\\.word$");
-				regEx.Add(TokenType.Byte_KEY,"^\\.byte$");
-				regEx.Add(TokenType.Space_KEY,"^\\.space$");
+				regEx.Add(TokenType.Asciiz_KEY,"^\\.แอสกี้$");
+				regEx.Add(TokenType.Word_KEY,"^\\.คำ$");
+				regEx.Add(TokenType.Byte_KEY,"^\\.ไบท์$");
+				regEx.Add(TokenType.Space_KEY,"^\\.จักรวาล$");
 
 				regEx.Add(TokenType.Data_KEY,"^\\.ข้อมูล$");
 				regEx.Add(TokenType.Text_KEY,"^\\.ข้อความ$");
