@@ -59,10 +59,12 @@ namespace PL
 
 			//constant key
 			Register,
-			Const,
+			Int,
 			String,
 			Char,
+			Const,
 			Address,
+			Register_Or_Const,
 			Label_Address,
 			Label
 		}
@@ -121,12 +123,14 @@ namespace PL
 				regEx.Add(TokenType.Endl_KEY,"^$");
 
 				regEx.Add(TokenType.Register,"^\\$[0-9A-Za-z]*$");
-				regEx.Add(TokenType.Const,"^(-)?[0-9]+$");
+				regEx.Add(TokenType.Int,"^(-)?[0-9]+$");
 				regEx.Add(TokenType.String,"\".*\"");
 				regEx.Add(TokenType.Char,"^\\\'.\\\'$");
+				regEx.Add(TokenType.Const,"^(-)?[0-9]+$|^\\\'.\\\'$");
 				regEx.Add(TokenType.Address,"^[0-9]*?\\(\\$[0-9A-Za-z]+\\)$");
 				regEx.Add(TokenType.Label,"^[a-zA-Z0-9_]+:$");
 				regEx.Add(TokenType.Label_Address,"^[a-zA-Z0-9_]+$");
+				regEx.Add(Token.TokenType.Register_Or_Const,"^\\$[0-9A-Za-z]*$|^(-)?[0-9]+$|^\\\'.\\\'$");
 			}
 			else if (Compiler.Language == "TH")
 			{
@@ -176,12 +180,14 @@ namespace PL
 				regEx.Add(TokenType.Endl_KEY,"^$");
 
 				regEx.Add(TokenType.Register,"^\\$[0-9A-Za-z]*$");
-				regEx.Add(TokenType.Const,"^(-)?[0-9]+$");
+				regEx.Add(TokenType.Int,"^(-)?[0-9]+$");
 				regEx.Add(TokenType.String,"\".*\"");
 				regEx.Add(TokenType.Char,"^\\\'.\\\'$");
+				regEx.Add(TokenType.Const,"^(-)?[0-9]+$|^\\\'.\\\'$");
 				regEx.Add(TokenType.Address,"^[0-9]*?\\(\\$[0-9A-Za-z]+\\)$");
 				regEx.Add(TokenType.Label,"^[a-zA-Z0-9_ก-๙]+:$");
 				regEx.Add(TokenType.Label_Address,"^[a-zA-Z0-9_ก-๙]+$");
+				regEx.Add(Token.TokenType.Register_Or_Const,"^\\$[0-9A-Za-z]*$|^(-)?[0-9]+$|^\\\'.\\\'$");
 			}
 		}
 

@@ -37,10 +37,12 @@ namespace PL
 			regs.Add("$t9", 0);
 			regs.Add("$ra", 0);
 			regs.Add("$v0", 0);
+			regs.Add("$sp", 0);
 		}
 
 		public void set(string registerName, int value)
 		{
+			if(registerName == "$0") registerName = "$zero";
 			if(regs.ContainsKey(registerName))
 			{
 				regs[registerName] = value;
@@ -53,6 +55,7 @@ namespace PL
 
 		public int get(string registerName)
 		{
+			if(registerName == "$0") registerName = "$zero";
 			if(regs.ContainsKey(registerName))
 			{
 				return regs[registerName];

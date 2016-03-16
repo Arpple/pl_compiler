@@ -65,16 +65,35 @@ namespace PL
                 return false;
         }
 
-        private void check(Token.TokenType type)
+        private void check(params Token.TokenType[] type)
         {
+			if(type[0] == Token.TokenType.Const)
+			{
+				check(Token.TokenType.Int,Token.TokenType.Char);
+				return;
+			}
+			else if(type[0] == Token.TokenType.Register_Or_Const)
+			{
+				check(Token.TokenType.Register,Token.TokenType.Int,Token.TokenType.Char);
+				return;
+			}
+			
+			string msg = "";
+			foreach(Token.TokenType tt in type)
+			{
+				msg += tt + " ";
+			}
             if(token == null)
             {
-                Error("there should be more " + type + " at the end");
+                Error("there should be more " +msg+ "at the end");
             }
-            if(token.type != type)
-            {
-                Error("#" + token.lineNumber + " :It should be " + type + " but I found " + token);
-            }
+			foreach(Token.TokenType tt in type)
+			{
+				if(token.type == tt)
+					return;
+			}
+			Error("#" + token.lineNumber + " :It should be " + msg + "but I found " + token);
+
         }
 
         private void nextLine()
@@ -147,13 +166,13 @@ namespace PL
 
             List<Token> args_list = new List<Token>();
 
-            check(Token.TokenType.Const);
+            check(Token.TokenType.Int);
             args_list.Add(token);
             nextToken();
             while(token.type == Token.TokenType.Comma_KEY)
             {
                 nextToken(); //consume comma
-                check(Token.TokenType.Const);
+                check(Token.TokenType.Int);
                 args_list.Add(token);
                 nextToken(); // consume arg
             }

@@ -11,6 +11,14 @@ namespace PL
 		{
 			Compiler.Error("Runtime","#" + code.key.lineNumber + "=" + code + ":" + msg);
 		}
+
+		private static int getConst(string data)
+		{
+			if(data[0] == '\'')
+				return (int)data[1];
+			else
+				return int.Parse(data);
+		}
 #endregion
 
 
@@ -39,6 +47,18 @@ namespace PL
             Compiler.debug("\n=====================================");
             Compiler.debug("Debug Result of $t1 : " + regs.get("$t1"));
         }
+
+		private int getRegisterOrConst(string data)
+		{
+			if(data[0] == '$')
+			{
+				return regs.get(data);
+			}
+			else
+			{
+				return getConst(data);
+			}
+		}
 
         private void execute(Code code)
         {
@@ -98,7 +118,7 @@ namespace PL
         private void execute_addi(Code code)
         {
             //addi $0 $1 x => $0 = $1 + x
-            int result = regs.get(code.value(1)) + int.Parse(code.value(2));
+			int result = regs.get(code.value(1)) + getConst(code.value(2));
             regs.set(code.value(0),result);
         }
 
@@ -112,7 +132,7 @@ namespace PL
         private void execute_subi(Code code)
         {
             //subi $0 $1 x => $0 = $1 - x
-            int result = regs.get(code.value(1)) - int.Parse(code.value(2));
+            int result = regs.get(code.value(1)) - getConst(code.value(2));
             regs.set(code.value(0),result);
         }
 
@@ -126,7 +146,7 @@ namespace PL
         private void execute_muli(Code code)
         {
             //muli $0 $1 x => $0 = $1 * x
-            int result = regs.get(code.value(1)) * int.Parse(code.value(2));
+            int result = regs.get(code.value(1)) * getConst(code.value(2));
             regs.set(code.value(0),result);
         }
 
@@ -140,7 +160,7 @@ namespace PL
         private void execute_divi(Code code)
         {
             //div $0 $1 x => $0 = $1 / x
-            int result = regs.get(code.value(1)) / int.Parse(code.value(2));
+            int result = regs.get(code.value(1)) / getConst(code.value(2));
             regs.set(code.value(0),result);
         }
         #endregion
@@ -159,7 +179,7 @@ namespace PL
         {
             //andi $0 $1 x => $0 = $1 & x
             int x = regs.get(code.value(1));
-            int y = int.Parse(code.value(2));
+            int y = getConst(code.value(2));
             int result = and(x,y);
             regs.set(code.value(0), result);
         }
@@ -194,7 +214,7 @@ namespace PL
         {
             //or $0 $1 $2 => $0 = $1 | $2
             int x = regs.get(code.value(1));
-            int y = int.Parse(code.value(2));
+            int y = getConst(code.value(2));
             int result = or(x,y);
             regs.set(code.value(0), result);
         }
@@ -252,7 +272,7 @@ namespace PL
         private void execute_beq(Code code)
         {
             //beq $0 $1 addr => if $0 == $1 , jump addr
-            bool result = regs.get(code.value(0)) == regs.get(code.value(1));
+            bool result = regs.get(code.value(0)) == getRegisterOrConst(code.value(1));
             if(result)
 			{
 				if(!jump(code.value(2)))
@@ -263,7 +283,7 @@ namespace PL
         private void execute_bnq(Code code)
         {
             //beq $0 $1 addr => if $0 != $1 , jump addr
-            bool result = regs.get(code.value(0)) != regs.get(code.value(1));
+            bool result = regs.get(code.value(0)) != getRegisterOrConst(code.value(1));
             if(result)
 			{
 				if(!jump(code.value(2)))
@@ -274,7 +294,7 @@ namespace PL
         private void execute_blt(Code code)
         {
             //blt $0 $1 addr => if $0 < $1 , jump addr
-            bool result = regs.get(code.value(0)) < regs.get(code.value(1));
+            bool result = regs.get(code.value(0)) < getRegisterOrConst(code.value(1));
             if(result)
 			{
 				if(!jump(code.value(2)))
@@ -285,7 +305,7 @@ namespace PL
         private void execute_blte(Code code)
         {
             //blte $0 $1 addr => if $0 <= $1 , jump addr
-            bool result = regs.get(code.value(0)) <= regs.get(code.value(1));
+            bool result = regs.get(code.value(0)) <= getRegisterOrConst(code.value(1));
             if(result)
 			{
 				if(!jump(code.value(2)))
@@ -296,7 +316,7 @@ namespace PL
         private void execute_bgt(Code code)
         {
             //bgt $0 $1 addr => if $0 > $1 , jump addr
-            bool result = regs.get(code.value(0)) > regs.get(code.value(1));
+            bool result = regs.get(code.value(0)) > getRegisterOrConst(code.value(1));
             if(result)
 			{
 				if(!jump(code.value(2)))
@@ -307,7 +327,7 @@ namespace PL
         private void execute_bgte(Code code)
         {
             //bgte $0 $1 addr => if $0 >= $1 , jump addr
-            bool result = regs.get(code.value(0)) >= regs.get(code.value(1));
+            bool result = regs.get(code.value(0)) >= getRegisterOrConst(code.value(1));
             if(result)
 			{
 				if(!jump(code.value(2)))
@@ -396,7 +416,15 @@ namespace PL
         private void execute_li(Code code)
         {
             //li $0 , x => $0 = x
-            regs.set(code.value(0),int.Parse(code.value(1)));
+			string value = code.value(1);
+			if(value[0] == '\'')
+			{
+				regs.set(code.value(0),(int)value[1]);
+			}
+			else
+			{
+				regs.set(code.value(0),int.Parse(value));
+			}
         }
 
         private void execute_la(Code code)
