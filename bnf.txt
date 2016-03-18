@@ -11,7 +11,7 @@
 <word_list>	=>	<const> | <const> , <word_list>
 <byte_st>   =>  <label> <byte_key> <byte_list>
 <byte_list> =>  <char> | <char> , <byte_list>
-<space_st>	=>	<label> <space_key>
+<space_st>	=>	<label> <space_key> <const>
 
 ## .text
 <text_segment>	=>	<text_key> | <text_key> <text_block_list>
