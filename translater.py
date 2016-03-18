@@ -1,0 +1,46 @@
+# -*- coding: UTF-8 -*-
+import sys
+
+source_name = sys.argv[1]
+target_name = sys.argv[2]
+
+source = open(source_name,'r')
+target = open(target_name,'w')
+for line in source:
+	line = line.replace(".data",".ข้อมูล")
+	line = line.replace(".text","	.ข้อความ")
+	line = line.replace(".asciiz",".แอสกี้")
+	line = line.replace(".word",".คำ")
+	line = line.replace(".byte",".ไบท์")
+	line = line.replace(".space",".จักรวาล")
+	line = line.replace(".data",".ข้อความ")
+	line = line.replace("add","บวก")
+	line = line.replace("addi","บวกอิ")
+	line = line.replace("sub","ลบ")
+	line = line.replace("subi","ลบอิ")
+	line = line.replace("mul","มูล")
+	line = line.replace("muli","มูลอิ")
+	line = line.replace("div","ดริฟต์")
+	line = line.replace("divi","ดริฟต์อิ")
+	line = line.replace("and","แอน")
+	line = line.replace("andi","แอนดี้")
+	line = line.replace("or","ออ")
+	line = line.replace("ori","อออิ")
+	line = line.replace("nor","นอ")
+	line = line.replace("beq","แยกอีคั่ว")
+	line = line.replace("bneq","แยกไม่อีคั่ว")
+	line = line.replace("blt","แยกน้อย")
+	line = line.replace("blte","แยกน้อยอีคั่ว")
+	line = line.replace("bgt","แยกมาก")
+	line = line.replace("bgte","แยกมากอีคั่ว")
+	line = line.replace("jump","พุ่ง")
+	line = line.replace("jal","พุ่งเสียบ")
+	line = line.replace("jr","พุ่งร์")
+	line = line.replace("load","โหลด")
+	line = line.replace("save","เสพ")
+	line = line.replace("li","ลิ")
+	line = line.replace("la","ละ")
+	line = line.replace("move","หมูบ")
+	line = line.replace("syscall","ซิสคอล")
+
+	target.write(line)
