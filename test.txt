@@ -1,0 +1,11 @@
+.data
+.text
+
+start:
+	beq	$t1 , 0 , int
+	jump end
+int:
+	addi $t1 , $t1, 2
+
+
+end:

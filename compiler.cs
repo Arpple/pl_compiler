@@ -39,7 +39,7 @@ namespace PL
 			VERBOSE = false;
 			MemorySize = 500;
 			AutoMemory = false;
-			Language = "TH";
+			Language = "EN";
 
 			if(args.Length > 0)
 			{
